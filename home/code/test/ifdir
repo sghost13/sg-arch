@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# If dir doesnt exhist, make it.
+
+TEST=$HOME/code/test/ifdir-test
+dirs="\
+	$TEST/poop \
+	$TEST/caca \
+	$TEST/directory \
+	"
+
+for dir in $dirs ; do
+	[[ -d $dir ]] || mkdir --mode=0660 --parents $dir
+done
+
+

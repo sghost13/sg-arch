@@ -1,0 +1,264 @@
+#!/usr/bin/env bash
+# $HOME/config/shells/conf.d/aliases.sh
+
+# SG
+#
+# Description :
+# Aliases for zsh, bash.
+
+## ----------------- alias-for-functions
+
+# micro
+alias m="micro"
+
+# bat
+# debian uses batcat
+if [[ -f /usr/bin/batcat ]] ; then
+    alias cat="/usr/bin/batcat --color=always --decorations=never --paging=never"
+    alias bat="/usr/bin/batcat --color=always --decorations=never --paging=never"
+elif [[ -f /usr/bin/bat ]] ; then
+    alias cat="/usr/bin/bat --color=always --decorations=never --paging=never"
+    alias bat="/usr/bin/bat --color=always --decorations=never --paging=never"
+fi
+
+# exa
+# Base, all files, all dirs.
+alias ls='/usr/bin/exa "${EXA_OPTS[@]}" --grid'
+# Long format.
+alias ll='/usr/bin/exa "${EXA_OPTS[@]}" --git --long'
+# Tree listing.
+alias lt='/usr/bin/exa "${EXA_OPTS[@]}" --tree'
+
+# cd
+alias cl='command /usr/bin/clear && /usr/bin/exa "${EXA_OPTS[@]}" --grid'
+alias ..='builtin cd .. && /usr/bin/clear && /usr/bin/exa "${EXA_OPTS[@]}" --grid'
+
+# help
+alias h="help"
+
+## -----------------
+
+#gpg
+#verify signature for isos
+alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+alias fix-gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+#receive the key of a developer
+alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+alias fix-gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+alias fix-keyserver="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
+
+#check vulnerabilities microcode
+alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
+
+#switch between bash and zsh
+alias tobash="sudo chsh $USER -s /bin/bash && echo 'Now log out.'"
+alias tozsh="sudo chsh $USER -s /bin/zsh && echo 'Now log out.'"
+
+alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+alias install-grub-efi="sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi"
+
+#fonts
+alias update-fc="sudo fc-cache -fv"
+
+alias userlist="cut -d: -f1 /etc/passwd | sort"
+
+alias print-path='echo $PATH | tr ":" "\n"'
+alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp;'
+alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
+
+alias shutdown='sudo shutdown now'
+alias restart='sudo reboot'
+
+alias wget="wget --hsts-file=$XDG_DATA_HOME/wget-hsts"
+
+alias fonts='fc-cache -f -v'
+
+alias gob="go build"
+alias gor="go run"
+alias goc="go clean -i"
+alias gta="go test ./..."       # go test all
+alias gia="go install ./..."    # go install all
+
+alias dockls="docker container ls | awk 'NR > 1 {print \$NF}'"                  # display names of running containers
+alias dockRr='docker rm $(docker ps -a -q)'                                     # delete every containers / images
+alias dockRr='docker rm $(docker ps -a -q) && docker rmi $(docker images -q)'   # delete every containers / images
+alias dockstats='docker stats $(docker ps -q)'                                  # stats on images
+alias dockimg='docker images'                                                   # list images installed
+alias dockprune='docker system prune -a'                                        # prune everything
+alias dockceu='docker-compose run --rm -u $(id -u):$(id -g)'                    # run as the host user
+alias dockce='docker-compose run --rm'
+
+
+
+
+# files ----------------------------------------------------------------------
+
+alias ae="micro ~/.config/bash/bash_aliases"
+alias be="micro ~/.bashrc-personal"
+alias fe="micro ~/.config/bash/bash_functions"
+alias ve="micro ~/.config/bash/bash_variables"
+alias ce="micro ~/.config/bash/ethrc"
+
+# folders ----------------------------------------------------------------------
+
+alias code="builtin cd $HOME/code && /usr/bin/clear && ls"
+alias config="builtin cd $HOME/.config && /usr/bin/clear && ls"
+alias shell="builtin cd $HOME/.config/shell && /usr/bin/clear && ls"
+alias zdot="cd $HOME/.config/shell/zsh && /usr/bin/clear && ls"
+alias bdot="cd $HOME/.config/shell/bash && /usr/bin/clear && ls"
+# shell ----------------------------------------------------------------------
+
+alias zsh="exec zsh"
+
+# ip ----------------------------------------------------------------------
+
+alias ip="ip -c"
+
+# cargo ----------------------------------------------------------------------
+
+alias cargo="cargo --color=auto"
+
+# lynx ----------------------------------------------------------------------
+
+alias lynx='lynx -cfg=~/.lynx/lynx.cfg -lss=~/.lynx/lynx.lss -vikeys'
+
+# journalctl ----------------------------------------------------------------------
+
+alias jctl='journalctl -p 3 -xb'
+
+# systemd ----------------------------------------------------------------------
+
+alias analyze='sudo systemd-analyze'
+alias security='sudo systemd-analyze security'
+# systemd-cgls - similar to ps i think #
+alias sd-cgls='systemd-cgls'
+
+# systemctl ----------------------------------------------------------------------
+
+# sudo
+alias restart="sudo systemctl restart"
+alias status="sudo systemctl status"
+alias enable="sudo systemctl enable"
+alias disable="sudo systemctl disable"
+alias mask="sudo systemctl mask"
+alias unmask="sudo systemctl unmask"
+alias start="sudo systemctl start"
+alias stop="sudo systemctl stop"
+alias alltimers='sudo systemctl list-timers --all'
+alias activetimers='systemctl list-timers'
+alias units='sudo systemctl list-unit-files'
+alias daemon='sudo systemctl daemon-reload'
+alias reset='sudo systemctl reset-failed'
+alias default='sudo systemctl get-default'
+alias sockets='sudo systemctl list-sockets'
+
+# user
+alias urestart='systemctl --user restart'
+alias ustatus='systemctl --user status'
+alias uenable='systemctl --user enable'
+alias udisable='systemctl --user disable'
+alias umask='systemctl --user mask'
+alias uunmask='systemctl --user unmask'
+alias ustart='systemctl --user start'
+alias ustop='systemctl --user stop'
+alias ualltimers='systemctl --user list-timers --all'
+alias uactivetimers='systemctl --user list-timers'
+alias uunits='systemctl --user list-unit-files'
+alias udaemon='systemctl --user daemon-reload'
+alias ureset='systemctl --user reset-failed'
+alias udefault='systemctl get-default'
+alias usockets='systemctl --user list-sockets'
+
+# ps ----------------------------------------------------------------------
+
+alias psa="/usr/bin/ps auxf"
+alias psgrep="/usr/bin/ps aux | grep -v grep | grep -i -e VSZ -e"
+alias psmem="/usr/bin/ps auxf | sort -nr -k 4"
+alias pscpu="/usr/bin/ps auxf | sort -nr -k 3"
+# This ps and systemd-cgls - useful to list all processes and
+# the systemd units they belong to.
+# ps - add pid,user,cgroup,args to the end #
+alias psps='ps xawf -eo '
+
+# NetworkManager ----------------------------------------------------------------------
+
+alias netman="NetworkManager"
+alias nmcli="nmcli --color=auto --pretty"
+alias jctrl-netman-wifi="journalctl -xe NM_DEVICE=wlp3s0"
+
+# rofi ----------------------------------------------------------------------
+
+alias rofi="/usr/bin/rofi -show run"
+alias rofiw="/usr/bin/rofi -show window"
+alias rofiss="/usr/bin/rofi -show ssh"
+
+# ssh ----------------------------------------------------------------------
+
+# ssh
+alias sshdt="sshd -t"
+
+# ssh-keygen
+alias sk-sg='ssh-keygen -t ed25519 -C'
+
+# ssh-audit
+#alias ssh-audit="ssh-audit --ssh2 --ipv4"
+
+# gpg ----------------------------------------------------------------------
+
+# verify signature for isos
+alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+
+# receive the key of a developer
+alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+
+# reflector ----------------------------------------------------------------------
+
+alias reflector='/usr/bin/sudo /usr/bin/reflector --save /etc/pacman.d/mirrorlist --protocol https --latest 40 --ipv4 --sort rate --country US,CA --completion-percent 100 --score 40 --fastest 20 --delay 2 --age 1 --verbose --connection-timeout 5 --download-timeout 5 --cache-timeout 300 --url https://archlinux.org/mirrors/status/json/'
+
+#alias reflector='sudo reflector --save /etc/pacman.d/mirrorlist --protocol https --latest 40 --ipv4 --sort rate --country US,CA --completion-percent 100 --score 40 --fastest 20 --delay 2 --age 1 --verbose --connection-timeout 5 --download-timeout 5 --cache-timeout 300 --url https://archlinux.org/mirrors/status/json/'
+#alias reflect='sudo reflector --save /etc/pacman.d/mirrorlist --protocol https --latest 40 --ipv4 --sort rate --country US,CA --completion-percent 100 --score 40 --fastest 20 --delay 2 --age 1 --verbose --connection-timeout 5 --download-timeout 5 --cache-timeout 300 --url https://archlinux.org/mirrors/status/json/'
+
+# package-manager ----------------------------------------------------------------------
+
+# pacman
+
+#list all pacman tools on system
+alias pac-tools-list='pacman -Ql pacman pacman-contrib | grep -E 'bin/.+''
+#Clean pacman package cache
+alias clear-pacman-cache='paccache -c ~/build/packages/'
+alias pacsyu='sudo pacman -Syu'                  # update only standard pkgs
+alias pacsyyu='sudo pacman -Syyu'                # Refresh pkglist & update standard pkgs
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
+
+alias paci='sudo pacman -S'               # install
+alias pachi='sudo pacman -Ql'             # Pacman Has Installed - what files where installed in a package
+alias pacs='sudo pacman -Ss'              # search
+alias pacu='sudo pacman -Syu'             # update
+alias pacr='sudo pacman -R'               # remove package but not dependencies
+alias pacrr='sudo pacman -Rs'             # remove package with unused dependencies by other softwares
+alias pacrc='sudo pacman -Sc'             # remove pacmans cache
+alias pacro='pacman -Rns $(pacman -Qtdq)'
+alias pacrl='rm /var/lib/pacman/db.lck'   # pacman remove locks
+alias pacls="sudo pacman -Qe"
+alias pacc='sudo pacman -Sc'
+alias paccc='sudo pacman -Scc'            # empty the whole cache
+
+# yay
+alias yaysua='yay -Sua --noconfirm'              # update only AUR pkgs (yay)
+alias yaysyu='yay -Syu --noconfirm'              # update standard pkgs and AUR pkgs (yay)
+
+alias yayi='yay -S'     # install
+alias yayhi='yay -Ql'   # Yay Has Installed - what files where installed in a package
+alias yays='yay -Ss'    # search
+alias yayu='yay -Syu'   # update
+alias yayr='yay -R'     # remove package but not dependencies
+alias yayrr='yay -Rs'   # remove package with unused dependencies by other softwares
+alias yayrc='yay -Sc'   # remove yays cache
+alias yayls="yay -Qe"
+
+# misc ----------------------------------------------------------------------
+
+#update-initramfs -u -k all
+
+
+#  ----------------------------------------------------------------------

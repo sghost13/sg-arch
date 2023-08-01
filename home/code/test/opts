@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+
+_SOURCE="$(echo "${BASH_SOURCE[0]}" | sed 's/.//g')"
+#echo "${BASH_SOURCE[0]}"
+echo "$_SOURCE"
+

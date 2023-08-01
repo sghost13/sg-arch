@@ -1,0 +1,115 @@
+
+# $HOME/.config/alacritty/conf.d/themes/arco_linux.yml
+
+# WARNING : SEE $HOME/.config/alacritty/conf.d/colors.yml FOR THEME SELECTION!!!
+
+# Colors (Arco Linux Theme)
+colors:
+
+  primary:
+    background: '#000000'
+    foreground: '#dddddd'
+
+    # The dimmed foreground color is calculated automatically if it is not
+    # present. If the bright foreground color is not set, or
+    # `draw_bold_text_with_bright_colors` is `false`, the normal foreground
+    # color will be used.
+    dim_foreground: '#828482'
+    bright_foreground: '#eaeaea'
+
+  # Colors which should be used to draw the terminal cursor.
+  #
+  # Allowed values are CellForeground/CellBackground, which reference the
+  # affected cell, or hexadecimal colors like #ff00ff.
+  cursor:
+    text: CellBackground
+    cursor: CellForeground
+
+  # Colors for the cursor when the vi mode is active.
+  #
+  # Allowed values are CellForeground/CellBackground, which reference the
+  # affected cell, or hexadecimal colors like #ff00ff.
+  vi_mode_cursor:
+    text: CellBackground
+    cursor: CellForeground
+
+  # Colors used for the search bar and match highlighting.
+  search:
+    # Allowed values are CellForeground/CellBackground, which reference the
+    # affected cell, or hexadecimal colors like #ff00ff.
+    matches:
+      foreground: '#000000'
+      background: '#ffffff'
+    focused_match:
+      foreground: '#ffffff'
+      background: '#000000'
+
+  # Keyboard regex hints
+  hints:
+
+    # First character in the hint label
+    #
+    # Allowed values are CellForeground/CellBackground, which reference the
+    # affected cell, or hexadecimal colors like #ff00ff.
+    start:
+      foreground: '#1d1f21'
+      background: '#e9ff5e'
+
+    # All characters after the first one in the hint label
+    #
+    # Allowed values are CellForeground/CellBackground, which reference the
+    # affected cell, or hexadecimal colors like #ff00ff.
+    end:
+      foreground: '#e9ff5e'
+      background: '#1d1f21'
+
+  # Color used for the indicator displaying the position in history during
+  # search and vi mode.
+  #
+  # By default, these will use the opposing primary color.
+  line_indicator:
+    foreground: None
+    background: None
+
+  # Colors which should be used to draw the selection area.
+  #
+  # Allowed values are CellForeground/CellBackground, which reference the
+  # affected cell, or hexadecimal colors like #ff00ff.
+  selection:
+    text: CellBackground
+#    background: CellForeground
+    background: '#000000'
+
+  # Normal colors
+  normal:
+    black:   '#3f3f3f'
+    red:     '#cc0000'
+    green:   '#4e9a06'
+    yellow:  '#c4a000'
+    blue:    '#94bff3'
+    magenta: '#85678f'
+    cyan:    '#06989a'
+    white:   '#dcdccc'
+
+  # Bright colors
+  bright:
+    black:   '#545454'
+    red:     '#fc5454'
+    green:   '#8ae234'
+    yellow:  '#fce94f'
+    blue:    '#94bff3'
+    magenta: '#b294bb'
+    cyan:    '#93e0e3'
+    white:   '#ffffff'
+
+  # If the dim colors are not set, they will be calculated automatically based
+  # on the `normal` colors.
+  dim:
+    black:   '#131415'
+    red:     '#864343'
+    green:   '#777c44'
+    yellow:  '#9e824c'
+    blue:    '#556a7d'
+    magenta: '#75617b'
+    cyan:    '#5b7d78'
+    white:   '#828482'

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# prints the ammount of time it takes to load an interactive shell
+
+for i in $(seq 1 10) ; do
+	time $SHELL -l -i -c exit ;
+done

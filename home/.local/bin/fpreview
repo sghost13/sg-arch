@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+## SG
+##
+## Description :
+## Preview script for use in my fzf functions/wrappers.
+
+## Name: bash_functions
+
+#TODO implement swayimg?
+
+function fzf-preview () {
+
+if [[ -f "$1" ]] ; then
+
+  case $1 in
+    *.jpg)   chafa $1   ;;
+    *.jpeg)  chafa $1   ;;
+    *.png)   chafa $1   ;;
+    *.svg)   chafa $1   ;;
+    *.svgz)  chafa $1   ;;
+    *.webp)  chafa $1   ;;
+    *.ico)   chafa $1   ;;
+    *.md)    glow $1    ;;
+    *.html)  lynx $1    ;;
+    *.gif)   chafa $1   ;;
+    *)       bat --color=always --style=header,header-filesize,grid "$1" ;;
+  esac
+
+elif [[ -d "$1" ]] ; then
+
+  exa --all --group-directories-first --color=always --icons --tree "$1"
+
+fi
+}
+
+fzf-preview "$1"

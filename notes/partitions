@@ -1,0 +1,34 @@
+/
+UUID=<...>  /home  ext4  defaults,nodev  1 2
+
+UUID=<...>  /tmp  ext4  defaults,nodev,nosuid,noexec  1 2
+
+/var
+UUID=<...>  /var/tmp  ext4  defaults,nodev,nosuid,noexec  1 2
+/var/log
+/var/log/audit
+
+/boot
+/boot/efi
+
+swap
+
+tmpfs  /dev/shm  tmpfs  rw,nodev,nosuid,noexec 0 0
+
+
+/boot
+/boot/efi
+
+/tmp
+/var/tmp
+/var
+/var/log
+/var/log/audit
+
+/opt
+/srv
+/usr
+/home
+
+/dev/shm
+

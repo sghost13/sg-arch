@@ -1,0 +1,27 @@
+
+# ----------------- setup grub.d dropin folder
+
+# Test file exhists, can be read, owned by root, then source it.
+sauce() {
+if [[ -f "$1" ]] ; then
+	if [[ -r "$1" ]] ; then
+        if [[ $(stat -c '%U' "$1") = "root" ]] ; then
+		    builtin source "$1"
+        fi
+	fi
+fi
+}
+# Test dir exhists and is owned by root, then run sauce on each file within.
+sauced() {
+if [[ -d "$1" ]] ; then
+    if [[ $(stat -c '%U' "$1") = "root" ]] ; then
+    	for file in "$1"/* ; do
+	    	sauce "$file"
+    	done
+    fi
+    unset file
+fi
+}
+
+sauced "/etc/default/grub.d"
+

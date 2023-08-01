@@ -1,0 +1,38 @@
+{
+    "editor.fontFamily": "'monospace', monospace",
+    "editor.fontLigatures": true,
+    "tabnine.experimentalAutoImports": true,
+    "workbench.colorTheme": "One Dark Pro Darker",
+    "errorLens.enableOnDiffView": true,
+    "shellcheck.executablePath": "/usr/bin/shellcheck",
+    "sonarlint.ls.javaHome": "/home/sg/.vscode-oss/extensions/sonarsource.sonarlint_managed-jre/jre/jdk-11.0.18+10-jre",
+    "path-intellisense.showHiddenFiles": true,
+    "prettier.requireConfig": true,
+    "sonarlint.disableTelemetry": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "color-highlight.matchRgbWithNoFunction": true,
+    "github.gitProtocol": "ssh",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "stylelint.packageManager": "yarn",
+    "npm.packageManager": "yarn",
+    "eslint.packageManager": "yarn",
+    "errorLens.lintFilePaths": {
+        "eslint": [
+            "**/*.eslintrc.{js,cjs,yaml,yml,json}",
+            "**/*package.json"
+        ],
+        "Stylelint": [
+            "**/*.stylelintrc",
+            "**/*.stylelintrc.{cjs,js,json,yaml,yml}",
+            "**/*stylelint.config.{cjs,js}",
+            "**/*package.json"
+        ]
+    },
+    "editor.fontSize": 12,
+    "shellcheck.enableQuickFix": false,
+    "sonarlint.rules": {
+        "css:S4662": {
+            "level": "off"
+        }
+    },
+}

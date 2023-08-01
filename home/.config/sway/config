@@ -1,0 +1,18 @@
+# Config for sway
+#
+# Read `man 5 sway` for a complete reference.
+
+# user config directory
+
+include $HOME/.config/sway/config.d/autostart_apps
+include $HOME/.config/sway/config.d/bindings
+include $HOME/.config/sway/config.d/clamshell
+include $HOME/.config/sway/config.d/input-output
+include $HOME/.config/sway/config.d/rules
+include $HOME/.config/sway/config.d/theme
+
+
+# Enable/Disable/Force xwayland support.
+# Enable will lazy load xwayland, only loading on first call.
+# Force will force load immediately.
+xwayland enable

@@ -1,0 +1,35 @@
+# Configuration for Alacritty, the GPU enhanced terminal emulator.
+
+# Imports are loaded in order, skipping all missing files, with the importing
+# file being loaded last. If a field is already present in a previous import, it
+# will be replaced.
+#
+# All imports must either be absolute paths starting with `/`, or paths relative
+# to the user's home directory starting with `~/`.
+import:
+  - ~/.config/alacritty/conf.d/bell.yml
+  - ~/.config/alacritty/conf.d/bindings.yml
+  - ~/.config/alacritty/conf.d/colors.yml
+  - ~/.config/alacritty/conf.d/cursor.yml
+#  - ~/.config/alacritty/conf.d/debug.yml
+  - ~/.config/alacritty/conf.d/env.yml
+  - ~/.config/alacritty/conf.d/font.yml
+  - ~/.config/alacritty/conf.d/hints.yml
+  - ~/.config/alacritty/conf.d/mouse.yml
+  - ~/.config/alacritty/conf.d/scrolling.yml
+  - ~/.config/alacritty/conf.d/selection.yml
+  - ~/.config/alacritty/conf.d/shell.yml
+  - ~/.config/alacritty/conf.d/window.yml
+
+# Live config reload (changes require restart)
+live_config_reload: true
+
+# Directory the shell is started in. If this is unset, or `None`, the working
+# directory of the parent process will be used.
+working_directory: None
+
+# Offer IPC using `alacritty msg` (unix only)
+ipc_socket: true
+
+# If `true`, bold text is drawn using the bright color variants.
+draw_bold_text_with_bright_colors: true

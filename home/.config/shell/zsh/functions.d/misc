@@ -1,0 +1,271 @@
+#!/usr/bin/env bash
+
+# Extract files
+extract() {
+    for file in "$@"
+    do
+        if [ -f $file ]; then
+            _ex $file
+        else
+            echo "'$file' is not a valid file"
+        fi
+    done
+}
+
+# Extract files in their own directories
+mkextract() {
+    for file in "$@"
+    do
+        if [ -f $file ]; then
+            local filename=${file%\.*}
+            mkdir -p $filename
+            cp $file $filename
+            cd $filename
+            _ex $file
+            rm -f $file
+            cd -
+        else
+            echo "'$1' is not a valid file"
+        fi
+    done
+}
+
+# Compress a file
+# TODO to improve to compress in any possible format
+# TODO to improve to compress multiple files
+cdcompress() {
+    local DATE="$(date +%Y%m%d-%H%M%S)"
+    tar cvzf "$DATE.tar.gz" "$@"
+}
+
+
+gtrm() {
+    git tag -d $1
+
+    if [ ! -z "$2" ]; then
+        git push $2 :refs/tags/$1
+    else
+        git push origin :refs/tags/$1
+    fi
+}
+
+ssh-create() {
+    if [ ! -z "$1" ]; then
+        ssh-keygen -f $HOME/.ssh/$1 -t rsa -N '' -C "$1"
+        chmod 700 $HOME/.ssh/$1*
+    fi
+}
+
+dback () {
+    if [ ! -z $1 ] && [ ! -z $2 ]; then
+        if [ ! -z $3 ]; then
+            BS=$3
+        else
+            BS="512k"
+        fi
+
+        dialog --defaultno --title "Are you sure?" --yesno "This will copy $1 to $2 (bitsize: $BS). Everything on $2 will be deleted.\n\n
+        Are you sure?"  15 60 || exit
+
+        (sudo pv -n $1 | sudo dd of=$2 bs=$BS conv=notrunc,noerror) 2>&1 | dialog --gauge "Backup from disk $1 to disk $2... please wait" 10 70 0
+    else
+        echo "You need to provide an input disk as first argument (i.e /dev/sda) and an output disk as second argument (i.e /dev/sdb)"
+    fi
+}
+
+blimg() {
+    if [ ! -z $1 ] && [ ! -z $2 ] && [ ! -z $3 ]; then
+        local CYEAR=$(date +'%Y')
+        local BASEDIR="${HOME}/workspace/webtechno/static"
+        #Basedir current year
+        local BASEDIRY="${HOME}/workspace/webtechno/static/${CYEAR}"
+
+        if [ ! -d $BASEDIRY ]; then
+            mkdir $BASEDIRY
+        fi
+
+        #basedir current article
+        local BASEDIRC="${BASEDIRY}/${2}"
+
+        if [ ! -d $BASEDIRP ]; then
+            mkdir $BASEDIRP
+        fi
+
+        local IMGRESIZED=imgresize "${1} 780"
+        echo "$IMGRESIZED"
+    fi
+}
+
+postgdump() {
+    local USER="postgres"
+    local HOST="localhost"
+    if [ ! -z $1 ]; then
+        if [ -f "${1}.sql" ]; then
+            rm -i "${1}.sql"
+        fi
+
+        if [ $# = 1 ]; then
+            pg_dump -c -U $USER -h $HOST $1 | pv --progress > "${1}.sql"
+            echo $1
+        fi
+
+        if [ $# = 2 ]; then
+            pg_dump -c -U $2 -h $HOST $1 | pv --progress > "${1}.sql"
+            echo $1
+        fi
+
+        if [ $# = 3 ]; then
+            pg_dump -c -U $2 -h $3 $1 | pv --progress > "${1}.sql"
+            echo $1
+        fi
+    fi
+
+    if [ $# = 0 ]; then
+        echo "You need at least to provide the database name"
+    fi
+}
+
+postgimport() {
+    local USER="postgres"
+    local HOST="localhost"
+    if [ ! -z $1 ]; then
+        DB=${1%\.*}
+        # sed -i "1s/^/CREATE DATABASE $DB;\n/" $1
+        if [ $# = 1 ];
+        then
+            pv --progress ${1} | psql -U $USER -h $HOST $1 -d $DB
+            echo $1
+        fi
+
+        if [ $# = 2 ]; then
+            pv --progress ${1} | psql -U $1 -h $HOST $1 -d $DB
+            echo $1
+        fi
+
+        if [ $# = 3 ]; then
+            pv --progress ${1} | psql -U $1 -h $2 $1 -d $DB
+            echo $1
+        fi
+    fi
+
+    if [ $# = 0 ]; then
+        echo "You need at least to provide the database name"
+    fi
+}
+
+matrix () {
+    local lines=$(tput lines)
+    cols=$(tput cols)
+
+    awkscript='
+    {
+        letters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()"
+        lines=$1
+        random_col=$3
+        c=$4
+        letter=substr(letters,c,1)
+        cols[random_col]=0;
+        for (col in cols) {
+            line=cols[col];
+            cols[col]=cols[col]+1;
+            printf "\033[%s;%sH\033[2;32m%s", line, col, letter;
+            printf "\033[%s;%sH\033[1;37m%s\033[0;0H", cols[col], col, letter;
+            if (cols[col] >= lines) {
+                cols[col]=0;
+            }
+    }
+}
+'
+
+echo -e "\e[1;40m"
+clear
+
+while :; do
+    echo $lines $cols $(( $RANDOM % $cols)) $(( $RANDOM % 72 ))
+    sleep 0.05
+done | awk "$awkscript"
+}
+
+pgdump() {
+    pg_dump -U postgres -h localhost x_loc_0bdf08de > pulsecheck_service_test.sql 
+}
+
+
+mkcd() {
+    local dir="$*";
+    local mkdir -p "$dir" && cd "$dir";
+}
+
+mkcp() {
+    local dir="$2"
+    local tmp="$2"; tmp="${tmp: -1}"
+    [ "$tmp" != "/" ] && dir="$(dirname "$2")"
+    [ -d "$dir" ] ||
+        mkdir -p "$dir" &&
+        cp -r "$@"
+}
+
+mkmv() {
+    local dir="$2"
+    local tmp="$2"; tmp="${tmp: -1}"
+    [ "$tmp" != "/" ] && dir="$(dirname "$2")"
+    [ -d "$dir" ] ||
+        mkdir -p "$dir" &&
+        mv "$@"
+    }
+
+historystat() {
+    history 0 | awk '{print $2}' | sort | uniq -c | sort -n -r | head
+}
+
+promptspeed() {
+    for i in $(seq 1 10); do /usr/bin/time exec zsh -i -c exit; done
+}
+
+ports() {
+    sudo netstat -tulpn | grep LISTEN | fzf;
+}
+
+duckduckgo() {
+    lynx -vikeys -accept_all_cookies "https://lite.duckduckgo.com/lite/?q=$@"
+}
+
+wikipedia() {
+    lynx -vikeys -accept_all_cookies "https://en.wikipedia.org/wiki?search=$@"
+}
+
+back() {
+    for file in "$@"; do
+        cp "$file" "$file".bak
+    done
+}
+
+# Launch a program in a terminal without getting any output,
+# and detache the process from terminal
+# (can then close the terminal without terminating process)
+-echo() {
+    "$@" &> /dev/null & disown
+}
+
+# Generate a password - default 20 characters
+pass() {
+    local size=${1:-20}
+    cat /dev/random | tr -dc '[:graph:]' | head -c$size
+}
+
+# Generate a m3u files with same filename as directories passed as arguments.
+# The file is written with all files in each arg.
+# Example: cm3u Xenogears
+# Create a file 'Xenogears.m3u' and inside for example 'Xenogears/Xenogears The Game.bin'
+cm3u() {
+    for file in "$@"
+    do
+        if [ -d $file ]; then
+            m3u="$file.m3u"
+            find "$file" -type f > "$m3u"
+        else
+            echo "'$file' should be the directory where all your files are"
+        fi
+    done
+}
+

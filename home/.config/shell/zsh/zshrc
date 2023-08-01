@@ -1,0 +1,153 @@
+
+# $HOME/.config/shell/zsh/zshrc
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+## ----------------- functions
+
+# Functions required ONLY for our shell rc files to work, go here.
+# The point of these functions is only to lessen the ammount of text.
+
+# Test file exhists and can be read, then source it. Else echo where it fails.
+sauce() {
+if [[ -f "$1" ]] ; then
+	if [[ -r "$1" ]] ; then
+		# shellcheck disable=SC1090
+		source "$1"
+	else
+		echo "Could't read file: $1"
+	fi
+else
+	echo "File doesn't exhist: $1"
+fi
+}
+
+# Test dir exhists, then run sauce on each file within.
+sauced() {
+if [[ -d "$1" ]] ; then
+	for file in "$1"/* ; do
+		sauce "$file"
+	done
+    unset file
+else
+	echo "Directory doesn't exhist: $1"
+fi
+}
+
+# Either dir exhists, or create that directory.
+makedir() {
+	[[ -d "$1" ]] || /usr/bin/mkdir "$1" && chmod 770 "$1"
+}
+
+# Either file exhists, or create that file.
+makefile() {
+	[[ -f "$1" ]] || /usr/bin/touch "$1" && chmod 660 "$1"
+}
+
+## ----------------- environment
+
+# environment
+sauced "$HOME/.config/shell/zsh/env.d"
+
+# path
+sauce "$XDG_CONFIG_HOME/shell/zsh/path"
+
+# zsh options
+sauce "$XDG_CONFIG_HOME/shell/zsh/setopt.zsh"
+
+# zsh history
+export HISTSIZE=10000
+export SAVEHIST=10000
+export HISTFILE="$XDG_STATE_HOME/zsh/history"
+
+## -----------------  Need to make these files/dirs manually.
+
+makedir "$XDG_CACHE_HOME/zsh"
+makedir "$XDG_STATE_HOME/zsh"
+makefile "$XDG_STATE_HOME/zsh/history"
+makedir "$XDG_DATA_HOME/nodejs"
+makefile "$NODE_REPL_HISTORY"
+
+## ----------------- prompt
+
+builtin eval "$(starship init zsh)"
+
+function set_win_title(){
+    echo -ne "\033]0; $TERM $USER@$HOST:${PWD/$HOME/~} \007"
+}
+precmd_functions+=(set_win_title)
+
+## ----------------- functions and aliases
+
+# aliases
+sauced "$XDG_CONFIG_HOME/shell/zsh/alias.d"
+
+# functions
+sauced "$XDG_CONFIG_HOME/shell/zsh/functions.d"
+
+## ----------------- fancy zsh stuff
+
+# Completion.
+autoload -Uz compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+
+# set comp/cache paths
+#compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION            # zcompdump file location
+zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache   # zcompcache file location
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'          # Case insensitive tab completion
+zstyle ':completion:*' rehash true                                 # automatically find new executables in path
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"            # Colored completion (different colors for dirs/files/etc)
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' menu select
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
+
+# Speed up completions
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit
+
+## ----------------- zsh plugins
+
+# Load zsh auto completions. Requires zsh-autocomplete package.
+sauce /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+# Load zsh autosuggestions. Requires zsh-autosuggestions package.
+sauce /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Use fzf
+sauce /usr/share/fzf/key-bindings.zsh
+sauce /usr/share/fzf/completion.zsh
+
+# Load zsh syntax hightlighting. Requires zsh-syntax-highlighting package.
+# sauce /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Load zsh fast syntax hightlighting. Requires zsh-fast-syntax-highlighting package.
+sauce /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+
+# Use history substring search. Requires zsh-history-substring-search package.
+sauce /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+## ----------------- eval
+
+if [[ -f /usr/bin/mcfly ]] ; then
+# Load Mcfly
+export MCFLY_FUZZY=true
+export MCFLY_RESULTS=20
+export MCFLY_INTERFACE_VIEW=BOTTOM
+export MCFLY_RESULTS_SORT=LAST_RUN
+eval "$(mcfly init zsh)"
+fi
+
+# Set direnv
+builtin eval "$(direnv hook zsh)"
+
+## ----------------- startup view
+
+colorscript
+
+## ----------------- unset stuff
+
+unset -f sauce sauced makedir makefile

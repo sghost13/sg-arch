@@ -1,0 +1,6 @@
+ssh-keygen
+-a 32
+-C comment
+-E sha256
+-t ed25519
+

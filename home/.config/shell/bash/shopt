@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+if [[ ${SHELL} = /bin/bash ]] ; then
+
+# Bash shopt options
+
+#set -o vi                        # Set vi editing mode
+#set -o noclobber                 # Prevent file overwrite on stdout redirection; use `>|` to force
+
+shopt -s autocd 2> /dev/null     # Prepend cd to directory names automatically
+# shopt -s assoc_expand_once
+shopt -s cdable_vars             # CD across the filesystem as if you're in that dir
+shopt -s cdspell 2> /dev/null    # Correct spelling errors in arguments supplied to cd
+# shopt -s checkhash
+shopt -s checkjobs
+shopt -s checkwinsize            # Update window size after every command
+shopt -s cmdhist                 # Save multi-line commands as one command
+# shopt -s compat31
+# shopt -s compat32
+# shopt -s compat40
+# shopt -s compat41
+# shopt -s compat42
+# shopt -s compat43
+# shopt -s compat44
+shopt -s complete_fullquote
+shopt -s direxpand
+shopt -s dirspell 2> /dev/null   # Correct spelling errors during tab-completion
+shopt -s dotglob
+shopt -s execfail
+shopt -s expand_aliases
+# shopt -s extdebug
+shopt -s extglob 2> /dev/null    # Turn on extended globbing
+# shopt -s extquote
+shopt -s failglob
+# shopt -s force_fignore
+# shopt -s globasciiranges
+shopt -s globstar 2> /dev/null   # Turn on recursive globbing (enables ** to recurse all directories)
+# shopt -s gnu_errfmt
+shopt -s histappend              # append to history, don't overwrite it
+shopt -s histreedit
+shopt -s histverify
+shopt -s hostcomplete
+# shopt -s huponexit
+# shopt -s inherit_errexit
+shopt -s interactive_comments
+shopt -s lastpipe
+# shopt -s lithist
+# shopt -s localvar_inherit
+# shopt -s localvar_unset
+# shopt -s login_shell
+# shopt -s mailwarn
+shopt -s no_empty_cmd_completion
+shopt -s nocaseglob              # Case-insensitive globbing (used in pathname expansion)
+# shopt -s nocasematch
+shopt -s nullglob
+# shopt -s progcomp
+# shopt -s progcomp_alias
+# shopt -s promptvars
+# shopt -s restricted_shell
+shopt -s shift_verbose
+shopt -s sourcepath
+shopt -s xpg_echo
+
+fi

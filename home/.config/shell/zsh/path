@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# $HOME/.config/shell/conf.d/path.sh
+
+# Append  path. If already found in path, do nothing. Also does nothing if dir does not exhist.
+# Useage: appendpath "/path/to/add" 	  # This adds new path to begining of current path.
+#		  appendpath "/path/to/add" after # This adds new path to end of current path.
+appendpath() {
+if [[ -d "$1" ]] ; then
+    if ! echo "$PATH" | /usr/bin/grep -Eq "(^|:)$1($|:)" ; then
+	    if [[ "$2" = "after" ]] ; then
+		    PATH="$PATH:$1"
+	    else
+		    PATH="$1:$PATH"
+	    fi
+    fi
+fi
+}
+
+# HOME BIN
+appendpath "$HOME/.local/bin"
+
+# VOLTA
+appendpath "$VOLTA_HOME/bin"
+
+# EMACS BIN
+appendpath "$HOME/.emacs.d/bin"
+
+# FLATPAK BIN
+appendpath "/var/lib/flatpak/exports/bin/"
+
+# CARGO BIN
+appendpath "$HOME/.cache/cargo/bin"
+
+# .NET BIN
+appendpath "$HOME/.dotnet/tools"
+
+# NODE BIN
+#
+
+unset -f appendpath

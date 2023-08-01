@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# $HOME/.config/shell/bash/bashrc
+
+# This file should contain everything specific to your bashrc config.
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# CHANGE TITLE OF TERMINALS
+case ${TERM} in
+	xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|alacritty|st|konsole*)
+    	PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+        ;;
+	screen*)
+    	PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+    	;;
+esac
+
+SHARED="$HOME/.config/shell/shared"
+BASHDOTDIR="$HOME/.config/shell/bash"
+
+## ----------------- bash-env
+
+# Bash specific env vars.
+
+HISTTIMEFORMAT='%F %T '   # use standard ISO 8601 timestamp
+
+HISTFILE=${XDG_DATA_HOME:-$HOME/.local/state}/bash/history
+
+HISTSIZE=20000
+HISTFILESIZE=${HISTSIZE}
+
+HISTCONTROL=ignoreboth:erasedups
+HISTIGNORE="ls:exa:cl:cd:top:exit:date"
+
+## ----------------- source-files
+
+# Source shared rc file. Chicken/Egg!
+sharedrc="$SHARED/sharedrc"
+if test -f "$sharedrc" ; then
+	if test -r "$sharedrc" ; then
+		#shellcheck source="../shared/sharedrc"
+		source "$sharedrc"
+	else
+		echo "Couldn't read file: $sharedrc"
+	fi
+else
+	echo "File doesn't exhist: $sharedrc"
+fi
+unset sharedrc
+
+# bash env. need to do manually for bash
+sauce "$BASHDOTDIR/bashenv"
+
+# shopt
+sauce "$BASHDOTDIR/shopt"
+
+## ----------------- completions
+
+# Enable bash programmable completion features in interactive shells
+if ! shopt -oq posix ; then
+	if [[ -f /usr/share/bash-completion/bash_completion ]] ; then
+		builtin source /usr/share/bash-completion/bash_completion
+	elif [[ -f /etc/bash_completion ]] ; then
+		builtin source /etc/bash_completion
+	fi
+fi
+
+# Ignore case on auto-completion
+# Note: bind used instead of sticking these in .inputrc
+#shellcheck disable=SC2308
+if [[ "$(expr index "$-" i)" -gt 0 ]]; then bind "set completion-ignore-case on"; fi
+
+# Show auto-completion list automatically, without double tab
+#shellcheck disable=SC2308
+if [[ "$(expr index "$-" i)" -gt 0 ]]; then bind "set show-all-if-ambiguous on"; fi
+
+
+## ----------------- bash-dirs/files
+
+# dirs and files that need to be manually made, bash specific
+
+makedir "$XDG_STATE_HOME/bash"
+makefile "$XDG_STATE_HOME/bash/history"
+
+## ----------------- eval
+
+# Set starship prompt
+builtin eval "$(starship init bash)"
+
+# Set direnv
+builtin eval "$(direnv hook bash)"
+
+unset -f sauce sauced makedir makefile

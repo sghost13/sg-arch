@@ -1,0 +1,10 @@
+{
+    "autosu": true,
+    "colorscheme": "atom-dark",
+    "diffgutter": true,
+    "paste": true,
+    "saveundo": true,
+    "scrollbar": true,
+    "tabhighlight": true,
+    "tabstospaces": true
+}

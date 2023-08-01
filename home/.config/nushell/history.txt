@@ -1,0 +1,17 @@
+cl
+clear
+help
+ls
+sys | get host
+cl
+clear
+ls
+ls -a
+cd .config
+ls
+list
+cd nushell
+clear
+ls
+micro config.nu
+m

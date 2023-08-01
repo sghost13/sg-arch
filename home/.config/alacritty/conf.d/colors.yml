@@ -1,0 +1,263 @@
+
+# $HOME/.config/alacritty/conf.d/colors.yml
+
+# Colors
+colors:
+
+  # The indexed colors include all colors from 16 to 256.
+  # When these are not set, they're filled with sensible defaults.
+  #
+  # Example:
+  #   `- { index: 16, color: '#ff00ff' }`
+  #
+#  indexed_colors: []
+
+  # Whether or not `window.opacity` applies to all cell backgrounds or only to
+  # the default background. When set to `true` all cells will be transparent
+  # regardless of their background color.
+#  transparent_background_colors: false
+
+#### Themes are located in the themes folder. 
+#### Select them by uncommenting the theme you want below.
+
+# Theme selections:
+import:
+
+# Favorites:
+#  - ~/.config/alacritty/conf.d/themes/arco_linux.yml
+#  - ~/.config/alacritty/conf.d/themes/argonaut.yml
+  - ~/.config/alacritty/conf.d/themes/onedark.yml
+#  - ~/.config/alacritty/conf.d/themes/one-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/ashes.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/astromouse.yml
+#  - ~/.config/alacritty/conf.d/themes/baskerville-countvoncount.yml
+#  - ~/.config/alacritty/conf.d/themes/garuda.dr460nized.yml
+#  - ~/.config/alacritty/conf.d/themes/tlh.yml
+#  - ~/.config/alacritty/conf.d/themes/tokyonight_night.yml
+#  - ~/.config/alacritty/conf.d/themes/tokyonight_storm.yml
+#  - ~/.config/alacritty/conf.d/themes/dracula.yml
+
+
+# the rest:
+
+#  - ~/.config/alacritty/conf.d/themes/3024.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/3024.light.yml
+#  - ~/.config/alacritty/conf.d/themes/afterglow.yml
+#  - ~/.config/alacritty/conf.d/themes/alabaster.yml
+#  - ~/.config/alacritty/conf.d/themes/ashes.light.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierdune.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierdune.light.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierforest.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierforest.light.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierheath.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierheath.light.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierlakeside.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierlakeside.light.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierseaside.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/atelierseaside.light.yml
+#  - ~/.config/alacritty/conf.d/themes/ayu-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/ayu-mirage.yml
+#  - ~/.config/alacritty/conf.d/themes/base16-default-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/baskerville-eldorado-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/baskerville-farSide.yml
+#  - ~/.config/alacritty/conf.d/themes/baskerville-ivory-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/baskerville-ivorylight.yml
+#  - ~/.config/alacritty/conf.d/themes/baskerville-lost-woods.yml
+#  - ~/.config/alacritty/conf.d/themes/belge.yml
+#  - ~/.config/alacritty/conf.d/themes/bespin.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/bespin.light.yml
+#  - ~/.config/alacritty/conf.d/themes/bitmute.yml
+#  - ~/.config/alacritty/conf.d/themes/bleh-1.yml
+#  - ~/.config/alacritty/conf.d/themes/blood-moon.yml
+#  - ~/.config/alacritty/conf.d/themes/breeze.yml
+#  - ~/.config/alacritty/conf.d/themes/brewer.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/brewer.light.yml
+#  - ~/.config/alacritty/conf.d/themes/campbell.yml
+#  - ~/.config/alacritty/conf.d/themes/catppuccin-frappe.yml
+#  - ~/.config/alacritty/conf.d/themes/catppuccin-latte.yml
+#  - ~/.config/alacritty/conf.d/themes/catppuccin-macchiato.yml
+#  - ~/.config/alacritty/conf.d/themes/catppuccin-mocha.yml
+#  - ~/.config/alacritty/conf.d/themes/chalk.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/chalk.light.yml
+#  - ~/.config/alacritty/conf.d/themes/challenger-deep.yml
+#  - ~/.config/alacritty/conf.d/themes/cloud.yml
+#  - ~/.config/alacritty/conf.d/themes/cobalt-2.yml
+#  - ~/.config/alacritty/conf.d/themes/codeschool.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/codeschool.light.yml
+#  - ~/.config/alacritty/conf.d/themes/colorfulcolors.yml
+#  - ~/.config/alacritty/conf.d/themes/darkside.yml
+#  - ~/.config/alacritty/conf.d/themes/darktooth.yml
+#  - ~/.config/alacritty/conf.d/themes/dawn.yml
+#  - ~/.config/alacritty/conf.d/themes/deafened.yml
+#  - ~/.config/alacritty/conf.d/themes/default.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/default.light.yml
+#  - ~/.config/alacritty/conf.d/themes/derp.yml
+#  - ~/.config/alacritty/conf.d/themes/digerati.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-canvasedpastel.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-catchmeifyoucan.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-citystreets.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-colorstar.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-panels.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-redphoenix.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-teva.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-unsiftedwheat.yml
+#  - ~/.config/alacritty/conf.d/themes/dkeg-vwbug.yml
+#  - ~/.config/alacritty/conf.d/themes/doomicide-darkocean.yml
+#  - ~/.config/alacritty/conf.d/themes/dotshare.yml
+#  - ~/.config/alacritty/conf.d/themes/dwmrob.yml
+#  - ~/.config/alacritty/conf.d/themes/eighties.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/eighties.light.yml
+#  - ~/.config/alacritty/conf.d/themes/embers.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/embers.light.yml
+#  - ~/.config/alacritty/conf.d/themes/epiphany.yml
+#  - ~/.config/alacritty/conf.d/themes/eqie6.yml
+#  - ~/.config/alacritty/conf.d/themes/erebus.yml
+#  - ~/.config/alacritty/conf.d/themes/euphrasia.yml
+#  - ~/.config/alacritty/conf.d/themes/fedora.yml
+#  - ~/.config/alacritty/conf.d/themes/fishbone.yml
+#  - ~/.config/alacritty/conf.d/themes/github_dark_default.yml
+#  - ~/.config/alacritty/conf.d/themes/github_dark.yml
+#  - ~/.config/alacritty/conf.d/themes/github_dimmed.yml
+#  - ~/.config/alacritty/conf.d/themes/github_light_default.yml
+#  - ~/.config/alacritty/conf.d/themes/github_light.yml
+#  - ~/.config/alacritty/conf.d/themes/gjm.yml
+#  - ~/.config/alacritty/conf.d/themes/gnometerm.yml
+#  - ~/.config/alacritty/conf.d/themes/google.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/google.light.yml
+#  - ~/.config/alacritty/conf.d/themes/gotham.yml
+#  - ~/.config/alacritty/conf.d/themes/grandshell.yml
+#  - ~/.config/alacritty/conf.d/themes/grayscale.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/grayscale.light.yml
+#  - ~/.config/alacritty/conf.d/themes/greenscreen.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/greenscreen.light.yml
+#  - ~/.config/alacritty/conf.d/themes/gruvbox-Dark.yml
+#  - ~/.config/alacritty/conf.d/themes/gruvbox-Light.yml
+#  - ~/.config/alacritty/conf.d/themes/gslob nature-suede.yml
+#  - ~/.config/alacritty/conf.d/themes/gutterslob-aikofog.yml
+#  - ~/.config/alacritty/conf.d/themes/gutterslob-lightwhite.yml
+#  - ~/.config/alacritty/conf.d/themes/gutterslob-lumifoo.yml
+#  - ~/.config/alacritty/conf.d/themes/hund.yml
+#  - ~/.config/alacritty/conf.d/themes/hybrid.yml
+#  - ~/.config/alacritty/conf.d/themes/hyper.yml
+#  - ~/.config/alacritty/conf.d/themes/iceberg-Dark.yml
+#  - ~/.config/alacritty/conf.d/themes/iceberg-Light.yml
+#  - ~/.config/alacritty/conf.d/themes/iiamblack.yml
+#  - ~/.config/alacritty/conf.d/themes/insignificato.yml
+#  - ~/.config/alacritty/conf.d/themes/invisibone.yml
+#  - ~/.config/alacritty/conf.d/themes/ir-black.yml
+#  - ~/.config/alacritty/conf.d/themes/isotope.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/isotope.light.yml
+#  - ~/.config/alacritty/conf.d/themes/iterm-Default.yml
+#  - ~/.config/alacritty/conf.d/themes/jasonwryan.yml
+#  - ~/.config/alacritty/conf.d/themes/jellybeans.yml
+#  - ~/.config/alacritty/conf.d/themes/jmbi.yml
+#  - ~/.config/alacritty/conf.d/themes/jwr-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/kanagawa.yml
+#  - ~/.config/alacritty/conf.d/themes/kasugano.yml
+#  - ~/.config/alacritty/conf.d/themes/kitty.yml
+#  - ~/.config/alacritty/conf.d/themes/londontube.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/londontube.light.yml
+#  - ~/.config/alacritty/conf.d/themes/marrakesh.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/marrakesh.light.yml
+#  - ~/.config/alacritty/conf.d/themes/material-Theme.yml
+#  - ~/.config/alacritty/conf.d/themes/material.yml
+#  - ~/.config/alacritty/conf.d/themes/mikado.yml
+#  - ~/.config/alacritty/conf.d/themes/mikazuki.yml
+#  - ~/.config/alacritty/conf.d/themes/mocha.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/mocha.light.yml
+#  - ~/.config/alacritty/conf.d/themes/molokai.yml
+#  - ~/.config/alacritty/conf.d/themes/monokai.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/monokai.light.yml
+#  - ~/.config/alacritty/conf.d/themes/monokai-Pro.yml
+#  - ~/.config/alacritty/conf.d/themes/monokai-Soda.yml
+#  - ~/.config/alacritty/conf.d/themes/monotheme.yml
+#  - ~/.config/alacritty/conf.d/themes/moonlight-II-VSCode.yml
+#  - ~/.config/alacritty/conf.d/themes/mostly-bright.yml
+#  - ~/.config/alacritty/conf.d/themes/muse.yml
+#  - ~/.config/alacritty/conf.d/themes/muzieca-lowcontrast.yml
+#  - ~/.config/alacritty/conf.d/themes/muzieca-mono.yml
+#  - ~/.config/alacritty/conf.d/themes/muzieca-pastel-white.yml
+#  - ~/.config/alacritty/conf.d/themes/nancy.yml
+#  - ~/.config/alacritty/conf.d/themes/navy-and-ivory.yml
+#  - ~/.config/alacritty/conf.d/themes/neon.yml
+#  - ~/.config/alacritty/conf.d/themes/new-moon.yml
+#  - ~/.config/alacritty/conf.d/themes/nightfly.yml
+#  - ~/.config/alacritty/conf.d/themes/nord.yml
+#  - ~/.config/alacritty/conf.d/themes/nova.yml
+#  - ~/.config/alacritty/conf.d/themes/nucolors.yml
+#  - ~/.config/alacritty/conf.d/themes/nudge.yml
+#  - ~/.config/alacritty/conf.d/themes/numixdarkest.yml
+#  - ~/.config/alacritty/conf.d/themes/ocean.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/oceanic-next.yml
+#  - ~/.config/alacritty/conf.d/themes/ocean.light.yml
+#  - ~/.config/alacritty/conf.d/themes/ok100-matrix.yml
+#  - ~/.config/alacritty/conf.d/themes/one-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/one-light.yml
+#  - ~/.config/alacritty/conf.d/themes/orangish.yml
+#  - ~/.config/alacritty/conf.d/themes/oxide.yml
+#  - ~/.config/alacritty/conf.d/themes/palenight.yml
+#  - ~/.config/alacritty/conf.d/themes/panda.yml
+#  - ~/.config/alacritty/conf.d/themes/paper-theme.yml
+#  - ~/.config/alacritty/conf.d/themes/paraiso.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/paraiso.light.yml
+#  - ~/.config/alacritty/conf.d/themes/parker_brothers.yml
+#  - ~/.config/alacritty/conf.d/themes/pencil-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/pencil-light.yml
+#  - ~/.config/alacritty/conf.d/themes/phrak1.yml
+#  - ~/.config/alacritty/conf.d/themes/pop!-os.yml
+#  - ~/.config/alacritty/conf.d/themes/pretty-and-pastel.yml
+#  - ~/.config/alacritty/conf.d/themes/pulp.yml
+#  - ~/.config/alacritty/conf.d/themes/railscasts.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/railscasts.light.yml
+#  - ~/.config/alacritty/conf.d/themes/rasi.yml
+#  - ~/.config/alacritty/conf.d/themes/rezza.yml
+#  - ~/.config/alacritty/conf.d/themes/rooster - SOS.yml
+#  - ~/.config/alacritty/conf.d/themes/rydgel.yml
+#  - ~/.config/alacritty/conf.d/themes/s3r0-modified.yml
+#  - ~/.config/alacritty/conf.d/themes/seabird.yml
+#  - ~/.config/alacritty/conf.d/themes/seoul256.yml
+#  - ~/.config/alacritty/conf.d/themes/sexcolors.yml
+#  - ~/.config/alacritty/conf.d/themes/shadesOfPurple.yml
+#  - ~/.config/alacritty/conf.d/themes/shapeshifter.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/shapeshifter.light.yml
+#  - ~/.config/alacritty/conf.d/themes/shic.yml
+#  - ~/.config/alacritty/conf.d/themes/simple_rainbow.yml
+#  - ~/.config/alacritty/conf.d/themes/snazzy.yml
+#  - ~/.config/alacritty/conf.d/themes/solarized-dark.yml
+#  - ~/.config/alacritty/conf.d/themes/solarized-light.yml
+#  - ~/.config/alacritty/conf.d/themes/sourcerer.yml
+#  - ~/.config/alacritty/conf.d/themes/splurge.yml
+#  - ~/.config/alacritty/conf.d/themes/substrata.yml
+#  - ~/.config/alacritty/conf.d/themes/swayr.yml
+#  - ~/.config/alacritty/conf.d/themes/sweetlove.yml
+#  - ~/.config/alacritty/conf.d/themes/taerminal.yml
+#  - ~/.config/alacritty/conf.d/themes/tangoesque.yml
+#  - ~/.config/alacritty/conf.d/themes/tangoish.yml
+#  - ~/.config/alacritty/conf.d/themes/tango.yml
+#  - ~/.config/alacritty/conf.d/themes/tartan.yml
+#  - ~/.config/alacritty/conf.d/themes/tender.yml
+#  - ~/.config/alacritty/conf.d/themes/terminal-app-basic.yml
+#  - ~/.config/alacritty/conf.d/themes/terminal-app.yml
+#  - ~/.config/alacritty/conf.d/themes/theme2.yml
+#  - ~/.config/alacritty/conf.d/themes/thwump.yml
+#  - ~/.config/alacritty/conf.d/themes/tokyonight_day.yml
+#  - ~/.config/alacritty/conf.d/themes/tomorrow.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/tomorrow.light.yml
+#  - ~/.config/alacritty/conf.d/themes/tomorrow-night-bright.yml
+#  - ~/.config/alacritty/conf.d/themes/tomorrow-night.yml
+#  - ~/.config/alacritty/conf.d/themes/trim-yer-beard.yml
+#  - ~/.config/alacritty/conf.d/themes/twilight.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/twilight.light.yml
+#  - ~/.config/alacritty/conf.d/themes/ubuntu.yml
+#  - ~/.config/alacritty/conf.d/themes/user77-mashup-colors.yml
+#  - ~/.config/alacritty/conf.d/themes/vacuous2.yml
+#  - ~/.config/alacritty/conf.d/themes/visiblue.yml
+#  - ~/.config/alacritty/conf.d/themes/visibone-alt-2.yml
+#  - ~/.config/alacritty/conf.d/themes/visibone.yml
+#  - ~/.config/alacritty/conf.d/themes/vscode.dark.yml
+#  - ~/.config/alacritty/conf.d/themes/wombat.yml
+#  - ~/.config/alacritty/conf.d/themes/x-dotshare.yml
+#  - ~/.config/alacritty/conf.d/themes/x-erosion.yml
+#  - ~/.config/alacritty/conf.d/themes/xterm.yml
+#  - ~/.config/alacritty/conf.d/themes/yousai.yml
+#  - ~/.config/alacritty/conf.d/themes/zenburn.yml

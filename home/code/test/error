@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+shopt -s failglob
+
+exit_with_error() {
+  echo "$0: SEE ALSO:" >&2
+  echo "" >&2
+  exit 1
+}
+
+if ! test -w /etc/sysctl.d ; then
+  echo "$0: ERROR: Folder /etc/sysctl.d not writeable! This script is supposed to be run as root." >&2
+  exit_with_error
+fi

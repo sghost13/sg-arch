@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# NEEDS TO BE RUN AS ROOT
+
+# If not root, exit.
+if [[ "$(id -u)" -ne 0 ]]; then
+	echo -e "\n  This script must be run as root.\n  Exiting..." >&2
+	exit 1
+fi
+
+echo -e "\n    Running sshd-harden as root..."
+
+# Remove old host keys.
+echo -e "    Removing old host keys..."
+rm --verbose /etc/ssh/ssh_host*
+
+# Re-generate the RSA and ED25519 keys with stronger encryption.
+echo -e "    Re-generating keys with stronger encryption..."
+ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""
+ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""
+
+# Enable the RSA and ED25519 HostKey directives in the /etc/ssh/sshd_config file.
+echo -e "    Enabling RSA and ED25519 HostKey directives in the /etc/ssh/sshd_config file..."
+sed -i 's/^\#HostKey \/etc\/ssh\/ssh_host_\(rsa\|ed25519\)_key$/HostKey \/etc\/ssh\/ssh_host_\1_key/g' /etc/ssh/sshd_config
+
+# Remove small Diffie-Hellman moduli
+echo -e "    Removing small Diffie-Hellman moduli..."
+awk '$5 >= 4096' /etc/ssh/moduli > /etc/ssh/moduli.safe
+mv -f /etc/ssh/moduli.safe /etc/ssh/moduli

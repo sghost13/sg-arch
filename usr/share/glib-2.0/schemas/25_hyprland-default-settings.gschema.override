@@ -1,0 +1,8 @@
+[org.gnome.desktop.interface]
+cursor-size=24
+cursor-theme='Catppuccin-Mocha-Maroon-Cursors'
+enable-animations=true
+font-name='Fira Sans, 10'
+gtk-theme='Catppuccin-Mocha-Red'
+icon-theme='Tela circle dracula dark'
+toolbar-style='text'

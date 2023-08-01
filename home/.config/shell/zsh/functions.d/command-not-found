@@ -1,0 +1,160 @@
+print_message () {
+
+    local messages
+    local message
+
+    ### SG CUSTOM INSULTS ##
+    declare -a array1=(
+        "60 percent of the time, it works every time."
+        "YEET"
+        "Works on my machine."
+        "You've reached the end of the internet, turn around."
+        "Its science, probably."
+        "Wow! That was impressively wrong!"
+        "Y u no speak computer???"
+        "You are not useless, you can still be used as a bad example."
+        "Your application for reduced salary has been sent!"
+        "Your mom had a severe case of diarrhea when you were born."
+        "You're proof that god has a sense of humor."
+        "Try using your brain the next time!"
+        "Two wrongs don't make a right, take your parents for example."
+        "Typing incorrect commands again, eh?"
+        "u suk"
+        "What if... you type an actual command the next time!"
+        "What if I told you... it is possible to type valid commands."
+        "What is this...? Amateur hour!?"
+        "Why are you so stupid?!"
+        "Why are you doing this to me?!"
+        "Why did the chicken cross the road? To get the hell away from you."
+        "plz uninstall"
+        "Pro tip: type a valid command!"
+        "Pro tip: kill yourself!"
+        "Rose are red. Violets are blue. I have five fingers. The middle one's for you."
+        "RTFM!"
+        "Sorry, what? I don’t understand idiot language."
+        "The degree of your stupidity is enough to boil water."
+        "The worst one today!"
+        "This is not a search engine."
+        "This is not Windows"
+        "This is why nobody likes you."
+        "Nice try."
+        "n00b"
+        "Pathetic."
+        "Perhaps computers are not for you..."
+        "Perhaps you should leave the command line alone..."
+        "Please step away from the keyboard."
+        "(╯°□°）╯︵ ┻━┻"
+        "¯\_(ツ)_/¯"
+        "I’ve heard of being hit with the ugly stick, but you must have been beaten senseless with it."
+        "Keep trying, someday you'll do something intelligent!"
+        "Let’s play horse. I’ll be the front end. And you be yourself."
+        "Life is good, you should get one."
+        "lol"
+        "lol... plz"
+        "My keyboard is not a touch screen!"
+        "My uptime is longer than your relationships."
+        "If brains were gasoline you wouldn’t have enough to propel a flea’s motorcycle around a doughnut."
+        "If ignorance is bliss, you must be the happiest person on earth."
+        "If shit was music, you'd be an orchestra."
+        "If what you don't know can't hurt you, you're invulnerable."
+        "Incompetence is also a form of competence.\n  Unfortunately for you it's the only type you will ever get to experience."
+        "ERROR_INCOMPETENT_USER"
+        "Fake it till you make it!"
+        "Go outside."
+        "Haha, n00b!"
+        "How many times do I have to flush before you go away?"
+        "I am _seriously_ considering 'rm -rf /'-ing myself..."
+        "I don't know what makes you so stupid, but it really works."
+        "I was going to give you a nasty look, but I see you already have one."
+        "Don't you have anything better to do?!"
+        "Don't you know anything?"
+        "Dropped on your head as a baby, eh?"
+        "error code: 1D10T"
+        "And the Darwin Award goes to.... ${USER}!"
+        "Allowing you to survive childbirth was medical malpractice."
+        "Are you always this stupid or are you making a special effort today?!"
+        "Are you even trying?!"
+        "Bad."
+        "Boooo!"
+        "Brains aren't everything. In your case they're nothing."
+        "Commands, random gibberish, who cares!"
+        "ACHTUNG! ALLES TURISTEN UND NONTEKNISCHEN LOOKENPEEPERS!\n DAS KOMPUTERMASCHINE IST NICHT FÜR DER GEFINGERPOKEN UND MITTENGRABEN!\n ODERWISE IST EASY TO SCHNAPPEN DER SPRINGENWERK,\n BLOWENFUSEN UND POPPENCORKEN MIT SPITZENSPARKEN.\n IST NICHT FÜR GEWERKEN BEI DUMMKOPFEN.\n DER RUBBERNECKEN SIGHTSEEREN KEEPEN DAS COTTONPICKEN HÄNDER IN DAS POCKETS MUSS.\n ZO RELAXEN UND WATSCHEN DER BLINKENLICHTEN."
+    )
+    ### EDIT THIS LINE IF YOU ONLY WANT TO USE CERTAIN INSULT LISTS ###
+    messages=( "${array1[@]}" )
+
+    # If CMD_NOT_FOUND_MSGS array is populated use those messages instead of the defaults
+    [[ -n ${CMD_NOT_FOUND_MSGS} ]] && messages=( "${CMD_NOT_FOUND_MSGS[@]}" )
+
+    # If CMD_NOT_FOUND_MSGS_APPEND array is populated append those to the existing messages
+    [[ -n ${CMD_NOT_FOUND_MSGS_APPEND} ]] && messages+=( "${CMD_NOT_FOUND_MSGS_APPEND[@]}" )
+
+    # Seed RANDOM with an integer of some length
+    RANDOM=$(od -vAn -N4 -tu < /dev/urandom)
+
+    # Print a randomly selected message, but only about half the time to annoy the user a
+    # little bit less.
+    if [[ $((${RANDOM} % 1 )) -lt 1 ]]; then
+        message=${messages[${RANDOM} % ${#messages[@]}]}
+        printf "\n  $(tput bold)$(tput setaf 1)${message}$(tput sgr0)\n\n" >&2
+    fi
+}
+
+function_exists () {
+    # Zsh returns 0 even on non existing functions with -F so use -f
+    declare -f $1 > /dev/null
+    return $?
+}
+
+#
+# The idea below is to copy any existing handlers to another function
+# name and insert the message in front of the old handler in the
+# new handler. By default, neither bash or zsh has has a handler function
+# defined, so the default behaviour is replicated.
+#
+# Also, ensure the handler is only copied once. If we do not ensure this
+# the handler would add itself recursively if this file happens to be
+# sourced multiple times in the same shell, resulting in a neverending
+# stream of messages.
+#
+
+#
+# Zsh
+#
+if function_exists command_not_found_handler; then
+    if ! function_exists orig_command_not_found_handler; then
+        eval "orig_$(declare -f command_not_found_handler)"
+    fi
+else
+    orig_command_not_found_handler () {
+        printf "zsh: command not found: %s\n" "$1" >&2
+        return 127
+    }
+fi
+
+command_not_found_handler () {
+    print_message
+    orig_command_not_found_handler "$@"
+}
+
+
+#
+# Bash
+#
+if function_exists command_not_found_handle; then
+    if ! function_exists orig_command_not_found_handle; then
+        eval "orig_$(declare -f command_not_found_handle)"
+    fi
+else
+    orig_command_not_found_handle () {
+        printf "%s: %s: command not found\n" "$0" "$1" >&2
+        return 127
+    }
+fi
+
+command_not_found_handle () {
+    print_message
+    orig_command_not_found_handle "$@"
+}
+
+

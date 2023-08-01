@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+## SG
+##
+## Description :
+## Preview script for use in my fzf functions/wrappers.
+
+## Name: bash_functions
+
+function fzf-open () {
+
+if [[ -f "$1" ]] ; then
+
+#         *.pdf)   evince --preview $1 ;;
+  case $1 in
+    *.jpg)   feh "$1"             ;;
+    *.jpeg)  feh "$1"             ;;
+    *.png)   feh "$1"             ;;
+    *.svg)   feh "$1"             ;;
+    *.svgz)  feh "$1"             ;;
+    *.webp)  feh "$1"             ;;
+    *.ico)   feh "$1"             ;;
+    *.md)    /usr/bin/micro "$1"  ;;
+    *.html)  /usr/bin/micro "$1"  ;;
+    *.gif)   gifsicle "$1"        ;;
+    *.iso)   echo "itsa iso"      ;;
+    *)       /usr/bin/micro "$1"  ;;
+  esac
+
+elif [[ -d "$1" ]] ; then
+
+  builtin cd "$1" || exit
+
+fi
+}
+
+fzf-open "$1"

@@ -1,0 +1,280 @@
+{
+	"layer": "top",
+    "position": "top",
+    "spacing": 4,
+
+    "modules-left": [
+        "custom/launcher",
+        "cpu",
+        "memory",
+        "wlr/workspaces",
+        "hyprland/window"
+    ],
+
+    "modules-center": [
+        "custom/waybar-media"
+    ],
+
+    "custom/launcher":{
+        "format": "",
+        "tooltip": false,
+        "on-click": "nwg-drawer -c 7 -is 70 -spacing 23",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+
+    "cpu": {
+        "interval": 5,
+        "tooltip": true,
+        "format": " :{}%",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+
+    "memory": {
+        "interval": 5,
+        "tooltip": true,
+        "format": "MEM:{used} SWAP:{swapUsed}",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+
+    "wlr/workspaces": {
+        "sort-by-name": false,
+        "sort-by-coordinates": false,
+        "sort-by-number": true,
+        "all-outputs": false,
+        "active-only": false,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9"
+        },
+        "on-click": "activate",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "smooth-scrolling-threshold": 1
+    },
+
+    "hyprland/window": {
+        "format": "什 {}",
+        "separate-outputs": true,
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+
+
+
+
+
+
+
+
+    "modules-right": ["tray", "idle_inhibitor", "pulseaudio", "backlight", "network", "clock", "battery", "custom/power"],
+
+	"tray":{
+		"icon-size": 22,
+		"spacing": 10,
+		"format": "{} "
+	},
+
+	"idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        },
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+
+    "pulseaudio": {
+		"tooltip": false,
+		"scroll-step": 5,
+		"format": "{icon} {volume}%",
+		"format-muted": " {volume}%",
+		"on-click":"pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"on-click-right":"gnome-control-center sound",
+		"on-click-middle":"gnome-control-center sound",
+		"format-icons": {
+			"default": ["", "", ""]
+		}
+	},
+
+
+
+
+
+
+
+
+
+
+
+    "hyprland/language": {
+        "format": " {}",
+        "format-us": "us",
+        "format-vi": "vi",
+        "keyboard-name": "AT Translated Set 2 keyboard"
+    },
+
+
+
+	"network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        // "format-wifi": " {essid}",
+        "format-wifi": " ",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "tooltip-format": " {essid} | {gwaddr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠ Disconnected",
+        // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-alt": " {essid}",
+        "on-click-right": "gnome-control-center wifi",
+        "on-click-middle": "gnome-control-center wifi"
+    },
+	"backlight": {
+		"tooltip": false,
+		// "format": "盛 {}%",
+		"format": "盛 ",
+		"format-alt": "盛 {}%",
+		"interval":1,
+        "on-scroll-up": "light -A 5",
+		"on-scroll-down": "light -U 5"
+	},
+    "battery": {
+        "states": {
+            "good": 90,
+            "warning": 20,
+            "critical": 20
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "{icon}  {capacity}%",
+        "format-plugged": "{icon}  {capacity}%",
+        "format-alt": "{icon}  {time}",
+        "format-icons": ["", "", "", "", ""],
+        "on-click-right": "gnome-control-center power",
+        "on-click-middle": "gnome-control-center power",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-"
+    },
+
+    "clock": {
+        "format": "{: %I:%M %p   %d/%m/%Y}",
+        "format-alt": "{: %r   %d/%m/%Y}",
+        "on-click": "eww open --toggle calendar",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "interval": 1
+    },
+
+    "custom/media": {
+        "interval": 30,
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 20,
+        "format-icons": {
+            "spotify": " ",
+            "default": " "
+        },
+        "escape": true,
+        "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+        "on-click": "playerctl play-pause"
+    },
+
+    "custom/power":{
+        "format": "  ",
+        "on-click": "eww open --toggle system-menu",
+        "on-click-middle": "hyprctl dispatch exit exit",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-"
+    },
+    "custom/wallpaper":{
+        "format":" ",
+        "on-click": "bash ~/.config/system_scripts/pkill_bc"
+    },
+    "custom/ws#1":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 1",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/ws#2":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 2",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/ws#3":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 3",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/ws#4":{
+        "format": " 﫸 ",
+        "on-click": "hyprctl dispatch workspace 4",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/ws#5":{
+        "format": " 﨩 ",
+        "on-click": "hyprctl dispatch workspace 5",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/ws#6":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 6",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/ws#7":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 7",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+
+    "custom/waybar-media": {
+        "return-type": "json",
+        "exec": "waybar-media.py status",
+        "on-click": "waybar-media.py playpause",
+        "on-scroll-up": "waybar-media.py previous",
+        "on-scroll-down": "waybar-media.py next",
+        "escape": true
+},
+
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "interval": 10,
+        "consume-icons": {
+            "on": " " // Icon shows only when "consume" is on
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    }
+}

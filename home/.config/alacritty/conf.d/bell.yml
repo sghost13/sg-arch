@@ -1,0 +1,34 @@
+
+# $HOME/.config/alacritty/conf.d/bell.yml
+
+# The bell is rung every time the BEL control character is received.
+bell:
+
+  # Values for `animation`:
+  #   - Ease
+  #   - EaseOut
+  #   - EaseOutSine
+  #   - EaseOutQuad
+  #   - EaseOutCubic
+  #   - EaseOutQuart
+  #   - EaseOutQuint
+  #   - EaseOutExpo
+  #   - EaseOutCirc
+  #   - Linear
+  animation: EaseOutExpo
+
+  # Duration of the visual bell flash in milliseconds. A `duration` of `0` will
+  # disable the visual bell animation.
+  duration: 1
+
+  # Visual bell animation color.
+  color: '#ffffff'
+
+  # When set to `command: None`, no command will be executed.
+  #
+  # Example:
+  #   command:
+  #     program: notify-send
+  #     args: ["Hello, World!"]
+  #
+  command: None

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Super simple random colorscript.
+
+# Put all colorscripts in $HOME/.local/share/colorscripts
+# Colorscript does not need to be executeable.
+# Colorscript does need to work when sourced.
+
+set errexit
+set nounset
+set -o pipefail
+shopt -s failglob
+
+/usr/bin/clear
+
+DIR="$HOME/.local/share/colorscripts"
+COUNT="$(find "$DIR" -maxdepth 1 -type f | wc -l)"
+ARRAY=("$DIR"/*)
+CHOICE="$(( "$RANDOM" % "$COUNT" ))"
+
+source "${ARRAY[$CHOICE]}"
+
+unset DIR COUNT ARRAY CHOICE

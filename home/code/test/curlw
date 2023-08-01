@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# CURL_CA_BUNDLE="/path/to/certbundle.crt"
+
+
+#### kicksecurl "scurl" curl wrapper
+# curl --ipv4,4 --tlsv1.3 --proto https --tcp-fastopen --show-error,S --silent,s --location,L "$@"
+# --doh-url https://url.com/doh
+# --dns-servers https://dns.com/server
+# --config /path/to/config.file
+
+curlwrap(){
+
+local CURL_OPTS ADD_OPTS
+
+CURL_OPTS=("$@")
+ADD_OPTS=()
+
+[[ "${CURL_OPTS[*]}" =~ --tlsv1.3 ]] || ADD_OPTS+=(--tlsv1.3)
+e
+[[ "${CURL_OPTS[*]}" =~ --ipv4 ]] || ADD_OPTS+=(--ipv4)
+
+for value in "${ADD_OPTS[@]}" ; do echo "$value" ; done
+#echo "${ADD_OPTS[@]}"
+#/usr/bin/curl "${ADD_OPTS[@]}" "$@"
+}
+curlwrap "$@"
+
++file,+FTPS, GOPHERS, HTTPS, IMAPS, LDAPS, POP3S, RTMPS, RTSP, SFTP, SMBS, SMTPS, WSS.
+-all,+file,+ftps,+gophers,+https,+imaps,+ldaps,
+# --http3 \
+# --tcp-fastopen \
+# --tls13-ciphers TLS_CIPHERS_HERE \
+# --user-agent user_agent_here \
+# --cacert file.cert \
+# --dns-servers 9.9.9.9
+# --doh-cert-status \
+# --doh-url https://dns.quad9.net/dns-query \

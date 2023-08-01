@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -o errexit          # Exit on most errors (see the manual)
+set -o errtrace         # Make sure any error trap is inherited
+set -o nounset          # Disallow expansion of unset variables
+set -o pipefail         # Use last non-zero exit code in a pipeline
+
+# ----------------- fcd
+## Description : fuzzy cd wrapper
+# If "cd" command is used without iput, use fzf to search, with exa tree preview.
+# Also adds auto clear/exa after cd into dir.
+
+function main() {
+
+if [[ "$#" -eq 0 ]]; then
+
+    local DIRS EXA_OPTS FZF_OPTS FD_OPTS
+
+    EXA_OPTS=(
+    --all
+    --color=always
+    --color-scale
+    --icons
+    --group-directories-first
+    --classify)
+
+    FZF_OPTS=(
+    --ansi
+    --cycle
+    --reverse
+    --border
+    --pointer=cd
+    --prompt=Search:
+    --bind shift-up:preview-page-up
+    --bind shift-down:preview-page-down
+    --bind ctrl-c:abort
+    --bind ctrl-q:abort
+    --bind esc:abort)
+
+    FD_OPTS=(
+    --hidden
+    --color=always
+    --no-ignore-vcs
+    --maxdepth=1
+    --type=d)
+
+    # Find files/dirs with fd, pipe to fzf.
+    DIRS=$(/usr/bin/fd "${FD_OPTS[@]}" \
+	    | /usr/bin/fzf "${FZF_OPTS[@]}" --preview-window=bottom,80% --preview="fpreview "./{}"")
+
+    builtin cd "$DIRS" && echo "$PWD" || return
+#    /usr/bin/clear ; /usr/bin/exa "${EXA_OPTS[@]}"
+
+else
+
+	builtin cd "$@" || return
+
+    if [[ "$1" != "--help"  ]] ; then
+	    /usr/bin/clear ; /usr/bin/exa "${EXA_OPTS[@]}"
+    fi
+
+fi
+}
+
+main "$@"

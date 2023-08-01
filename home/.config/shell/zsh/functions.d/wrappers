@@ -1,0 +1,413 @@
+#!/usr/bin/env bash
+
+## SG
+##
+## Description :
+
+# strict mode
+#set -Eeuo pipefail
+# debug mode
+#set -x
+
+
+#-----
+#trap 'echo >&2 "Error - exited with status $? at line $LINENO:";
+#         pr -tn $0 | tail -n+$((LINENO - 3)) | head -n7 >&2' ERR
+
+#-----
+#trap '>&2 echo Command failed: $(tail -n+$LINENO $0 | head -n1)' ERR
+
+
+EXA_OPTS=(
+--all
+--color always
+--color-scale
+--icons
+--group-directories-first
+--classify)
+
+BAT_OPTS=(
+--plain
+--paging=never
+--decorations=never
+--color=always)
+
+FZF_OPTS=(
+--cycle
+--reverse
+--border
+--pointer=
+--prompt=Search:
+--bind shift-up:preview-page-up
+--bind shift-down:preview-page-down
+--bind ctrl-c:abort
+--bind ctrl-q:abort
+--bind esc:abort)
+
+#FD_OPTS=()
+
+# ----------------- pacman
+
+# lists packages installed explicitly and pipes them into fzf
+pace(){
+    pacman -Qeq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
+}
+
+# lists packages installed as dependencies and pipes them into fzf
+pacd(){
+    pacman -Qdq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
+}
+
+# ----------------- curl
+## Description :
+## Wrapper around curl to ensure secure usage.
+
+curl() {
+/usr/bin/curl --tlsv1.3 --proto "=https" --ipv4 "$@"
+}
+
+# ----------------- cd
+## Description :
+## Wrapper around cd with many improvements i enjoy.
+#alias cd="cdd"
+# If "cd" command is used alone, use fzf to search dirs, with exa tree preview.
+# Select one, cd into it, clear the screen, then use exa to list.
+function cd() {
+if [[ "$#" -eq 0 ]]; then
+    local dirs
+    # Find files/dirs with fd, pipe to fzf. Added files to search.
+    dirs=$(/usr/bin/fd --hidden \
+	                   --color=always \
+	                   --no-ignore-vcs \
+                       --maxdepth=1 \
+                       --type=d \
+	    | /usr/bin/fzf "${FZF_OPTS[@]}" --ansi \
+	                                    --preview-window=bottom,80% \
+	                                    --preview="fpreview "./{}"" )
+   	builtin cd "$dirs" || return
+    /usr/bin/clear ; /usr/bin/exa "${EXA_OPTS[@]}"
+else
+	builtin cd "$@" || return
+    if [[ "$1" != "--help"  ]] ; then
+	   	/usr/bin/clear ; /usr/bin/exa "${EXA_OPTS[@]}"
+    fi
+fi
+}
+
+# Goes up a specified number of directories  (i.e. up 4)
+function up() {
+local d=""
+local limit="$1"
+# Default to limit of 1
+if [[ -z "$limit" ]] || [[ "$limit" -le 0 ]]; then
+	limit=1
+fi
+for ((i=1;i<=limit;i++)); do
+	d="../$d"
+done
+#Perform cd. Show error if cd fails
+if ! cd "$d"; then
+	echo "Couldn't go up $limit dirs.";
+fi
+}
+
+# ----------------- rm
+## Description :
+## Wrapper for rm command.
+
+# If rm without options is used, use fzf to select multiple files, with bat previews, and remove them. Use tab to select multiple files.
+function rm() {
+local SOURCES
+if [[ "$#" -eq 0 ]] ; then
+	# Prompt user interactively to select multiple files with tab + fuzzy search.
+	SOURCES=$(/usr/bin/fd --hidden \
+    	                  --color=always \
+   	    	              --no-ignore-vcs \
+            	          --maxdepth=1 \
+        	| /usr/bin/fzf "${FZF_OPTS[@]}" --ansi \
+        							        --multi \
+        							        --marker='rm' \
+            	                            --preview="fpreview "./{}"" \
+                	                        --preview-window=right,75% )
+    echo -e "\n"
+    # We use xargs to capture filenames with spaces in them properly.
+    echo "$SOURCES" | xargs -I '{}' rm -rf --verbose {}
+    echo -e "\n"
+    /usr/bin/exa "${EXA_OPTS[@]}"
+else
+    echo -e "\n"
+    /usr/bin/rm -rfv "$@"
+    echo -e "\n"
+    if [[ "$1" != "--help"  ]] ; then
+        /usr/bin/exa "${EXA_OPTS[@]}"
+    fi
+fi
+}
+
+## ----------------- cp
+## Description :
+## Wrapper for cp command.
+
+# If cp without options is used, use fzf to select multiple files, with bat previews,
+# and copy them to dir you want. Use tab to select multiple files.
+function cp() {
+local SOURCES TARGET REPLY MESSAGE
+if [[ "$#" -eq 0 ]] ; then
+    MESSAGE="\n\n   Use tab to select multiple files in fzf search page.\n   Use full path, not variables.\n   ie: /path/to/copy/to\n"
+    yellow "$MESSAGE"
+    # Use correct read command depending on users shell.
+    if [[ "$(basename "$SHELL")" =~ "bash" ]] ; then
+        read -r -e -p 'Copy full path destination : ' -i "$TARGET" TARGET
+    elif [[ "$(basename "$SHELL")" = "zsh" ]] ; then
+        read -r "TARGET?Copy full path desitinaion : "
+    else
+        red "$(basename "$SHELL") is not supported. Exiting.\n"
+        exit 1
+    fi
+    # On empty target clear, relist files, let user know target was empty.
+    if [ -z "$TARGET" ] ; then
+        /usr/bin/clear && /usr/bin/exa "${EXA_OPTS[@]}"
+        red "\n\n  No destination specified. Canceled copy. \n"
+        return 1
+    fi
+    # This corrects issue where directory is not found as ~ is
+    # not expanded properly when stored directly from user input
+    if echo "$TARGET" | grep -q "~"; then
+        TARGET=$(echo $TARGET | sed 's/~//')
+        TARGET=~/$TARGET
+    fi
+    # Prompt user interactively to select multiple files with tab + fuzzy search.
+    SOURCES=$(/usr/bin/fd --hidden \
+                          --color=always \
+                          --no-ignore-vcs \
+                          --maxdepth=1 \
+            | /usr/bin/fzf "${FZF_OPTS[@]}" --ansi \
+            						        --marker='cp' \
+            						        --multi \
+		                                    --preview="fpreview "./{}"" \
+		                                    --preview-window=right,75%)
+    echo -e "\n"
+    echo "$SOURCES" | xargs -I '{}' /usr/bin/cp -fv {} '/'"$TARGET"'/'
+    echo -e "\n"
+    /usr/bin/exa "${EXA_OPTS[@]}"
+else
+    echo -e "\n"
+    /usr/bin/cp -fv "$@"
+    echo -e "\n"
+    if [[ "$1" != "--help"  ]] ; then
+        /usr/bin/exa "${EXA_OPTS[@]}"
+    fi
+fi
+}
+
+## ----------------- mv
+## Description :
+## Aliases and improvements on move command.
+
+# If mv without options is used, use fzf to select multiple files, with bat previews,
+# and move them to dir you want. Use tab to select multiple files.
+function mv() {
+local SOURCES TARGET REPLY MESSAGE
+if [[ "$#" -eq 0 ]] ; then
+MESSAGE="\n\n   Use tab to select mulitple files in fzf search page.\n   Use full path, not variables.\n   i.e. /path/to/directory\n"
+yellow "$MESSAGE"
+    # Use correct read command depending on users shell.
+    if [[ "$(basename "$SHELL")" =~ "bash" ]] ; then
+        read -r -e -p 'Move full path destination : ' -i "$TARGET" TARGET
+    elif [[ "$(basename "$SHELL")" = "zsh" ]] ; then
+        read -r "TARGET?Move full path desitinaion : "
+    else
+        red "$(basename "$SHELL") is not supported. Exiting.\n"
+        exit 1
+    fi
+    # On empty target, relist files, let user know target was empty.
+    if [ -z "$TARGET" ] ; then
+        /usr/bin/clear && /usr/bin/exa "${EXA_OPTS[@]}"
+        red "\n\n  No destination specified. Canceled move. \n"
+        return 1
+    fi
+    # This corrects issue where directory is not found as ~ is
+    # not expanded  properly When stored directly from user input
+    if echo "$TARGET" | grep -q "~"; then
+        TARGET=$(echo $TARGET | sed 's/~//')
+        TARGET=$HOME$TARGET
+    fi
+    # Prompt user interactively to select multiple files with tab + fuzzy search.
+    SOURCES=$(/usr/bin/fd --hidden \
+                   		  --color=always \
+                   		  --no-ignore-vcs \
+                          --maxdepth=1 \
+            | /usr/bin/fzf "${FZF_OPTS[@]}" --ansi \
+            						        --marker='mv' \
+            						        --multi \
+                                            --preview="fpreview "./{}"" \
+                                            --preview-window=right,70%)
+    echo -e "\n"
+    # We use xargs to capture filenames with spaces in them properly
+    echo "$SOURCES" | xargs -I '{}' mv -fv {} '/'"$TARGET"'/'
+    /usr/bin/exa "${EXA_OPTS[@]}"
+else
+    echo -e "\n"
+    /usr/bin/mv -fv "$@"
+	echo -e "\n"
+    if [[ "$1" != "--help"  ]] ; then
+        /usr/bin/exa "${EXA_OPTS[@]}"
+    fi
+
+fi
+}
+
+## ----------------- man
+## Description :
+## Aliases and improvements on man command.
+
+# Man without options will use fzf to select a page, with page previews.
+function man() (
+local MAN="/usr/bin/man"
+if [ -n "$1" ]; then
+	$MAN "$@"
+    return $?
+else
+	$MAN -k . | /usr/bin/fzf --reverse \
+                             --prompt='Search : ' \
+                             --preview="echo {1} | sed 's/(.*//' \
+                      					         | xargs $MAN -P 'bat --color=always'" \
+                       					         | awk '{print $1}' \
+                       					         | sed 's/(.*//' \
+                       					         | xargs $MAN
+fi
+# After finished, relist files
+/usr/bin/exa "${EXA_OPTS[@]}"
+)
+
+## ----------------- help
+# Description :
+# Aliases and improvements on help commands.
+
+# Use fzf to list and preview my help/preview folder.
+# Selecting a file uses micro to edit it. "h", or "help" followed
+# by a command prints colored output to terminal for that command.
+# ie: h bat, help bat
+function help() {
+/usr/bin/clear
+# This uses bat utility to colorize --help output on all help commands.
+helpme() { "$@" --help 2>&1 | /usr/bin/bat "${BAT_OPTS[@]}" --language=help ; }
+helpme "$1"
+}
+
+## ----------------- micro
+# Description :
+# Aliases and improvements on micro command.
+
+# Micro editor wrapper. Micro command used alone uses fzf as file previewer/selctor. m aliased to micro.
+function micro() {
+local files
+if [[ "$#" -eq 0 ]]; then
+#shellcheck disable=SC2140
+	files=$(/usr/bin/fd --hidden \
+    		            --color=always \
+       		            --type=f \
+       		            --no-ignore-vcs \
+                        --maxdepth=1 \
+       		| /usr/bin/fzf "${FZF_OPTS[@]}" --ansi \
+       		                                --preview-window=bottom,75% \
+      		                                --preview="fpreview "{}"" )
+	# We use xargs to capture filenames with spaces in them properly
+    echo "$files" | xargs -I '{}' fopen '{}'
+else
+	/usr/bin/micro "$@"
+fi
+}
+
+# ----------------- env
+## Description :
+## Aliases and improvements for env command.
+
+# A color wrapper for env.
+# If env is used without arguments, use bat to colorize output.
+function env() {
+if [[ -n "$1" ]] ; then
+	/usr/bin/env "$@"
+else
+    /usr/bin/clear
+	/usr/bin/env | /usr/bin/bat "${BAT_OPTS[@]}" --language=bash | sort
+fi
+}
+
+# ----------------- alias
+## Description :
+## Aliases and improvements for alias command.
+
+# A color wrapper for alias.
+# If alias is  used without arguments, use bat to colorize output.
+function alias() {
+if [[ "$#" -eq 0 ]] ; then
+    /usr/bin/clear
+	builtin alias | /usr/bin/bat "${BAT_OPTS[@]}" --language=bash
+else
+	builtin alias "$@"
+fi
+}
+
+# ----------------- history
+## Description :
+## Aliases and improvements for history command.
+
+# A color wrapper for history.
+# If history is  used without arguments, use bat to colorize output.
+function history() {
+if [[ "$#" -eq 0 ]] ; then
+    # Using "less" as the language only because it gave the nicest output.
+    /usr/bin/clear
+	builtin history | /usr/bin/bat "${BAT_OPTS[@]}" --language=less
+else
+	builtin history "$@"
+fi
+}
+
+# ----------------- export
+## Description :
+## Aliases and improvements for export command.
+
+# A color wrapper for export.
+# If export is  used without arguments, use bat to colorize output.
+function export() {
+if [[ "$#" -eq 0 ]] ; then
+    /usr/bin/clear
+	builtin export | /usr/bin/bat "${BAT_OPTS[@]}" --language=bash
+else
+	builtin export "${@?}"
+fi
+}
+
+## ----------------- touch
+## Description :
+## Aliases and improvements on touch command.
+
+# Stupid touch wrapper to clear and relist files after using touch automatically.
+function touch() {
+if [[ "$1" != "--help" ]] ; then
+	/usr/bin/touch "$@"
+	/usr/bin/clear
+	/usr/bin/exa "${EXA_OPTS[@]}"
+else
+	/usr/bin/touch "$@"
+fi
+}
+
+## ----------------- mkdir
+## Description :
+## Aliases and improvements on mkdir command.
+
+# Stupid mkdir wrapper to clear and relist files after using mkdir automatically.
+function mkdir() {
+if [[ "$1" != "--help" ]] ; then
+	/usr/bin/clear
+	/usr/bin/mkdir "$@"
+    /usr/bin/exa "${EXA_OPTS[@]}"
+else
+	/usr/bin/mkdir "$@"
+fi
+}
+
+## -----------------  -----------------  -----------------  -----------------  -----------------
